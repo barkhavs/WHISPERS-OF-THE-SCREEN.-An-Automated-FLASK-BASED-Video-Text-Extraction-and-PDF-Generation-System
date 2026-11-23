@@ -1,0 +1,133 @@
+from flask import Flask, render_template
+
+
+app = Flask(__name__)
+
+import subprocess
+import os
+import cv2
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import ImageReader
+import paddleocr
+
+def create_snapshots_and_ocr_from_youtube_1fps_opencv(youtube_url, output_filename, chunk_size):
+    """
+    Downloads a YouTube video, extracts 1 frame per second snapshots,
+    performs OCR on each snapshot, and generates a PDF with images and OCR results using reportlab.
+
+    Args:
+        youtube_url (str): The URL of the YouTube video.
+        output_filename (str): The desired filename for the output PDF.
+        chunk_size (int): The duration (in seconds) of each processing chunk.
+    """
+    try:
+        video_path = "temp_youtube_video.mp4"
+
+        # Remove the previous video if it exists
+        if os.path.exists(video_path):
+            os.remove(video_path)
+
+        subprocess.run(["yt-dlp", "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best", "-o", video_path, youtube_url], check=True)
+
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        output_folder = os.path.join(desktop_path, "YouTubeSnapshots")
+        os.makedirs(output_folder, exist_ok=True)
+        output_path = os.path.join(output_folder, output_filename)
+
+        c = canvas.Canvas(output_path, pagesize=letter)
+        width, height = letter
+
+        global_snapshot_count = 0
+
+        cap = cv2.VideoCapture(video_path)
+        if not cap.isOpened():
+            raise ValueError("Could not open video file.")
+
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        total_duration = int(total_frames / fps)
+
+        ocr = paddleocr.PaddleOCR(use_angle_cls=True, lang='en')  # Initialize PaddleOCR
+
+        for start_time in range(0, total_duration, chunk_size):
+            end_time = min(start_time + chunk_size, total_duration)
+            print(f"Processing chunk: {start_time} - {end_time} seconds")
+
+            start_frame = int(start_time * fps)
+            end_frame = int(end_time * fps)
+
+            current_frame = start_frame
+            while current_frame < end_frame:
+                cap.set(cv2.CAP_PROP_POS_FRAMES, current_frame)
+                ret, frame = cap.read()
+                if ret:
+                    snapshot_filename = os.path.join(output_folder, f"snapshot_{global_snapshot_count}.jpg")
+                    if cv2.imwrite(snapshot_filename, frame):
+                        if global_snapshot_count > 0:
+                            c.showPage()  # start new page for all pages after first page
+                        img = ImageReader(snapshot_filename)
+                        c.drawImage(img, 50, height - 350, width=500, height=300)
+
+                        # Perform OCR
+                        result = ocr.ocr(snapshot_filename, cls=True)
+                        if result and result[0]:
+                            ocr_text = "\n".join([line[1][0] for line in result[0]])
+                            c.drawString(50, height - 360, "OCR Text:")
+                            text_object = c.beginText(50, height - 380)
+                            for line in ocr_text.split('\n'):
+                                text_object.textLine(line)
+                            c.drawText(text_object)
+                        else:
+                            c.drawString(50, height - 360, "No text detected.")
+
+                        global_snapshot_count += 1
+                    else:
+                        print(f"Failed to save snapshot: {snapshot_filename}")
+                else:
+                    print("Error reading frame")
+                    break
+                current_frame += int(fps)
+
+        cap.release()
+        c.save()
+        print(f"PDF saved to: {output_path}")
+        os.remove(video_path)
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error downloading video: {e}")
+    except ValueError as e:
+        print(e)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    youtube_url = input("Enter YouTube video URL: ")
+    output_filename = input("Enter output PDF filename (e.g., snapshots_ocr.pdf): ")
+    try:
+        chunk_size = int(input("Enter chunk size in seconds (e.g., 240): "))
+    except ValueError:
+        print("Invalid chunk size. Using default of 240 seconds.")
+        chunk_size = 240 #default value.
+    create_snapshots_and_ocr_from_youtube_1fps_opencv(youtube_url, output_filename, chunk_size)
+
+
+@app.route("/")
+def hello_world():
+    return render_template('index.html')
+    # return "<p>Hello, World!</p>"
+
+@app.route("/about")
+def about():
+    return render_template('aboutus.html')
+
+@app.route("/services")
+def services():
+    return 'welcome to my services page'
+
+@app.route("/contact")
+def contact():
+    return 'welcome to my contact page'
+
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -1,0 +1,321 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('space.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+    background-color: #010615; 
+    color: #eee; 
+}
+
+.container {
+    background: linear-gradient(to right, #01192b, #011829);
+    padding: 20px;
+    text-align: center;
+    color: #f9f7f7d7;
+    position: absolute; /* Needed for positioning */
+    top: 0; 
+    right: 0; 
+    border-radius: 0 0 0 100px; 
+    width: 300px;
+    
+    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.container h1 {
+    font-size: 2em;
+    margin: 0 0 10px 0;
+    font-family: 'Times New Roman', Times, serif;
+    color:#eee
+}
+
+.container p {
+    font-size: 1em;
+    margin: 0;
+    line-height: 1.5;
+    font-family:  sans-serif;
+    color: rgb(41, 104, 221);
+}
+
+.container p b {
+    font-weight: bold;
+    color: #32d4d4c4; 
+}
+
+.contentainer {
+    flex-grow: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-content-p {
+    display: center;
+    gap: 40px;
+}
+
+.image-content-p {
+    position: absolute; /* Take out of normal document flow */
+    bottom: 0; /* Align to the bottom */
+    left: 50; /* Align to the left */
+    display: flex; /* Arrange images horizontally */
+    align-items: flex-end; /* Align images to the bottom */
+    gap: 20px; /* Space between images */
+    padding: 20px; /* Add some padding around the images */
+}
+
+.image-content-p img {
+    max-width: 200px; /* Adjust max width as needed */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Optional: Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow */
+    transition: transform 0.3s ease, opacity 0.5s ease; /* For hover effect */
+    opacity: 0; /* Initially hidden */
+}
+
+.image-content-p img.fade-in {
+    opacity: 1; /* Show when fade-in class is applied */
+}
+
+.image-content-p img:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* More prominent shadow */
+}
+
+/* Animation for the images */
+.fade-in {
+    animation: fade-in-animation 1s ease forwards; /* Use a named animation */
+}
+
+@keyframes fade-in-animation { /* Define the animation */
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.image-content-p img:nth-child(1) {
+    animation-delay: 0.5s;
+}
+
+.image-content-p img:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.image-content-p img:nth-child(3) {
+    animation-delay: 1.5s; /* Added delay for the third image */
+}
+
+/* Important: Prevent overlap with other content */
+body {
+    padding-bottom: 250px; /* Adjust as needed (image height + padding) */
+    position: relative; /* Needed for absolute positioning of .image-content-p */
+}
+
+nav {
+    width: 150px;
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+nav ul li {
+    margin: 13px 0;
+}
+
+nav ul li a {
+    color: rgb(0, 0, 0); 
+    text-decoration: maroon;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    transition: background-color 0.9s ease, transform 0.3s ease; 
+    width: 100%;
+    text-align: center;
+    display: block; /* Ensure the entire link area is clickable */ 
+  }
+  
+  nav ul li a:hover {
+    background-color: rgba(255, 0, 43, 0.61); /* Darker blue on hover */
+    transform: scale(1.1); 
+  }
+  
+  nav ul li a.active {
+    background-color: rgba(200, 0, 0, 0.968); /* Red for active link */
+    color: rgb(99, 22, 22); /* Make text white on red background */
+  }
+
+.image-container {
+    display: flex; 
+    justify-content: center; 
+    margin-top: 20px; 
+  }
+
+  .row {
+    display: center; 
+  }
+
+  .col-md-4 {
+    flex: 0 0 33.33%; 
+    max-width: 33.33%;
+    margin: 0 10px; 
+  }
+
+  img {
+    max-width: 129%; 
+    height: auto; 
+  }
+
+.container2 {
+    display: flex;
+    flex-wrap: wrap; /* Allow images to wrap to the next line */
+    justify-content: left; /* Center the images horizontally */
+}
+
+.image-container {
+    width: 150px; /* Adjust image size as needed */
+    margin: 10px; 
+}
+
+.img {
+    width: 100%;
+    height: auto;
+}
+
+.container3 {
+    background-color: #ffffff;
+    padding: 60px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: top;
+}
+
+h1 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#videoPlayer {
+    margin-top: 20px;
+}
+
+/* Responsive adjustments (example) */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    input[type="text"] {
+        width: 95%;
+    }
+
+    #videoPlayer iframe, #videoPlayer video {
+        width: 100%; /* Make video responsive */
+        height: auto;
+    }
+}
+
+
+footer {
+    background-color: #ffffff;
+    color: #020000;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+}
+
+.footer-section {
+    margin-bottom: 20px;
+    width: 300px; /* Adjust as needed */
+    text-align: left;
+}
+
+.footer-section h3 {
+    margin-bottom: 10px;
+    color: #000000;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 5px;
+}
+
+.footer-section a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    color: #fff;
+}
+
+.footer-bottom {
+    margin-top: 20px;
+    border-top: 1px solid #000000;
+    padding-top: 10px;
+    text-align: center;
+    font-size: 0.9em;
+}
+@media (max-width: 768px) {
+    .footer-section {
+        width: 100%;
+        text-align: center;
+    }
+}
